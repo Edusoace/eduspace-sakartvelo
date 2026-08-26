@@ -1,11 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "res.cloudinary.com" },
-      { protocol: "https", hostname: "i.ytimg.com" },
-    ],
-  },
-};
+import createNextIntlPlugin from 'next-intl/plugin';
 
-export default nextConfig;
+// მიუთითე ახალი გზა request.ts-მდე:
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+
+export default withNextIntl(nextConfig);

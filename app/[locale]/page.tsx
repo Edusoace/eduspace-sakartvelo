@@ -1,7 +1,8 @@
+import { getTranslations } from 'next-intl/server';
 import { supabase, MediaPost } from "@/lib/supabase";
 import MediaGrid from "@/components/MediaGrid";
 
-export const revalidate = 30; // refresh the public gallery every 30s
+export const revalidate = 30;
 
 async function getPosts(): Promise<MediaPost[]> {
   const { data, error } = await supabase
@@ -18,29 +19,31 @@ async function getPosts(): Promise<MediaPost[]> {
 
 export default async function HomePage() {
   const posts = await getPosts();
+  // Server Component-ში ვართ, ამიტომ getTranslations და await უნდა:
+  const t = await getTranslations('HomePage');
 
   return (
     <div>
       {/* Hero */}
       <section className="mx-auto max-w-5xl px-4 pb-16 pt-20 text-center md:pt-28">
-        <span className="mb-5 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-teal-300">
-          სწავლა · ცოდნა · ზრდა
+        <span className="mb-5 inline-block rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-slate-300">
+          {t('badge')}
         </span>
         <h1 className="font-display text-4xl font-semibold leading-[1.1] text-slate-50 md:text-6xl">
-          Learn without limits,
+          {t('title1')}
           <br />
-          <span className="text-gold-400">wherever you are in Sakartvelo.</span>
+          <span className="text-amber-400">{t('title2')}</span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-base text-slate-400 md:text-lg">
-          Video lessons, articles, and podcasts built for Georgian students, educators, and
-          lifelong learners — free to watch, easy to share.
+          {t('description')}
         </p>
+
         <div className="mt-9 flex justify-center gap-3">
-          <a href="#videos" className="btn-primary">
-            Browse lessons
+          <a href="#videos" className="px-5 py-2.5 rounded-lg bg-amber-400 text-slate-950 font-semibold hover:bg-amber-300 transition">
+            {t('browseLessons')}
           </a>
-          <a href="#articles" className="btn-secondary">
-            Read articles
+          <a href="#articles" className="px-5 py-2.5 rounded-lg border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10 transition">
+            {t('readArticles')}
           </a>
         </div>
       </section>
@@ -49,13 +52,12 @@ export default async function HomePage() {
       <section id="videos" className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-24">
         <div className="mb-10 text-center">
           <h2 className="font-display text-2xl font-semibold text-slate-50 md:text-3xl">
-            Latest lessons & articles
+            {t('latestTitle')}
           </h2>
           <p className="mt-2 text-sm text-slate-400">
-            Fresh content from the EduSpace Sakartvelo team.
+            {t('latestDesc')}
           </p>
         </div>
-
         <MediaGrid posts={posts} />
       </section>
     </div>
